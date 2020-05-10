@@ -1,0 +1,45 @@
+@import "_colors.scss";
+@import "_buttons.scss";
+@import "_exercice.scss";
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+h1 {
+  font-size: 3rem;
+}
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  &--header {
+    background-color: hsl(var(--main-tint), 20%, 50%);
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    padding: .5rem;
+    width: 100vw;
+    &-btn {
+      border-radius: .2rem;
+      font-weight: bold;
+      margin-right: .5rem;
+    }
+  }
+  &--main {
+    align-content: center;
+    display: grid;
+    justify-content: center;
+    padding: .5rem;
+  }
+  &--footer {
+    background-color: hsl(var(--main-tint), 20%, 20%);
+    color: hsl(150, 50%, 100%);
+    padding: .5rem .5rem .75rem;
+    width: 100vw;
+  }
+}
