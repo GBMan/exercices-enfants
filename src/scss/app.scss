@@ -1,11 +1,13 @@
-@import "_colors.scss";
-@import "_buttons.scss";
-@import "_exercice.scss";
+@import "./config/_colors.scss";
+@import "./config/_fonts.scss";
+@import "./elements/_buttons.scss";
+@import "./components/_exercice.scss";
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 body {
+  $font-name:$font-riffic;
   margin: 0;
 }
 h1 {

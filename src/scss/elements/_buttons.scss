@@ -1,0 +1,13 @@
+.btn {
+    border: none;
+    cursor: pointer;
+    padding: .25rem .5rem;
+    outline: none;
+    &::-moz-selection,
+    &::selection,
+    &:focus,
+    &::-moz-focus-inner {
+        border: none;
+        outline: none;
+    }
+}

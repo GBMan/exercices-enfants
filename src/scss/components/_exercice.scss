@@ -3,15 +3,15 @@
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
     color: hsl(var(--main-tint), 70%, 40%);
     display: grid;
-    justify-content: center;
+    // justify-content: center;
     justify-items: center;
+    max-width: calc(100vw - 2rem);
     padding: .5rem 1rem 1rem;
+    width: 320px;
     &--title {
         font-size: 2rem;
         margin-top: 0;
-    }
-    & > * {
-        // margin-bottom: 1rem;
+        text-align: center;
     }
     &--btn {
         background-color: hsl(var(--main-tint), 70%, 40%);
@@ -52,21 +52,41 @@
         }
     }
     &--infos {
+        align-content: center;
+        align-items: center;
         display: grid;
         grid-template-columns: 1fr 1fr;
         justify-content: space-around;
         justify-items: center;
         width: 100%;
     }
-    &--core {
-        display: grid;
-        justify-content: center;
+    &--btn-play-pause {
+        font-family: $font-picto;
+        vertical-align: text-bottom;
+    }
+    &--actions {
+        display: flex;
+        justify-content: space-between;
         justify-items: center;
+        width: 100%;
+    }
+    &--rules {
+        text-align: justify;
+    }
+    &--intro,
+    &--game,
+    &--bilan {
+        display: grid;
+        justify-items: center;
+        width: 100%;
         & > * {
             margin-bottom: 1rem;
-            &:last-child() {
+            &:last-child {
                 margin-bottom: 0;
             }
         }
+    }
+    &--bilan-txt {
+        text-align: justify;
     }
 }
