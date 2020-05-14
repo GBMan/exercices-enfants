@@ -5,6 +5,7 @@ import Timer from '../../utils/Timer'
 export default function QuizzTemplate(props) {
     const {
         title,
+        localStorageKey,
         getQuestion,
         getBilan,
         nbQuestions,
@@ -25,12 +26,17 @@ export default function QuizzTemplate(props) {
     const [currentQuestion, setCurrentQuestion] = useState(0)
     const [currentStep, setCurrentStep] = useState(STEP_INTRO)
     const [gamePaused, setGamePaused] = useState(false)
-    const eltAnswer = useRef(null);
+    const eltAnswer = useRef(null)
     const idTimeout = useRef(null)
     const idInterval = useRef(null)
-    const timer = useRef(new Timer());
+    const highScore = useRef(null)
+    const timer = useRef(new Timer())
 
     useEffect(() => {
+        const recipesJSON = localStorage.getItem(localStorageKey)
+        if (recipesJSON !== null) {
+            highScore.current = JSON.parse(recipesJSON)
+        }
         return () => {
             clearTimeout(idTimeout.current)
             clearInterval(idInterval.current)
@@ -38,13 +44,11 @@ export default function QuizzTemplate(props) {
     }, [])
 
     useEffect(() => {
-        console.log("useEffect currentStep")
         if (currentStep === STEP_GAME)
             nextQuestion()
     }, [currentStep])
 
     function handleValidate(event) {
-        console.log("handleValidate")
         event.preventDefault()
         switch (true) {
             case currentStep === STEP_INTRO:
@@ -67,7 +71,8 @@ export default function QuizzTemplate(props) {
                 }
                 break;
             case currentStep === STEP_BILAN:
-                setCurrentStep(STEP_INTRO)
+                initGame()
+                setCurrentStep(STEP_GAME)
                 break;
             default:
                 break;
@@ -107,13 +112,23 @@ export default function QuizzTemplate(props) {
     }
 
     function nextQuestion() {
-        console.log("nextQuestion")
         clearTimeout(idTimeout.current)
         if (currentQuestion === nbQuestions) {
             clearInterval(idInterval.current)
             setQuestion("")
             setCurrentStep(STEP_BILAN)
-            setMessage(getBilan(time, nbErrors, timer.current))
+            timer.current.pauseChrono()
+
+            let newHighScore = {timer:timer.current.getMilliseconds(), nbErrors:nbErrors}
+            if (highScore && highScore.current) {
+                if (highScore.current.timer < newHighScore.timer) {
+                    newHighScore = highScore.current
+                }
+            }
+            highScore.current = newHighScore
+            localStorage.setItem(localStorageKey, JSON.stringify(highScore.current))
+
+            setMessage(getBilan(timer.current.getMilliseconds(), nbErrors, highScore.current.timer))
         }
         else {
             setCurrentQuestion((prevCurrentQuestion) => {return prevCurrentQuestion + 1})
