@@ -64,10 +64,16 @@ export default function QuizzTemplate(props) {
                     idTimeout.current = setTimeout(nextQuestion, DURATION_GOOD_ANSWER)
                 }
                 else {
-                    setMessage("Oups, il y a une erreur.")
-                    eltAnswer.current.select()
-                    setError(true)
-                    setNbErrors((prevNbError) => {return prevNbError + 1})
+                    if (playerAnswer === "") {
+                        setMessage("Oups ! Mets une réponse avant de valider.")
+                        setError(true)
+                    }
+                    else {
+                        setMessage("Oups ! Il y a une erreur.")
+                        eltAnswer.current.select()
+                        setError(true)
+                        setNbErrors((prevNbError) => {return prevNbError + 1})
+                    }
                 }
                 break;
             case currentStep === STEP_BILAN:
