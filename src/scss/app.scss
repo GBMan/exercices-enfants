@@ -7,7 +7,7 @@
   box-sizing: border-box;
 }
 body {
-  $font-name:$font-riffic;
+  font-family:$font-engcomica;
   margin: 0;
 }
 h1 {
@@ -27,9 +27,13 @@ h1 {
     padding: .5rem;
     width: 100vw;
     &-btn {
+      background-color: hsl(var(--main-tint), 30%, 90%);
       border-radius: .2rem;
-      font-weight: bold;
       margin-right: .5rem;
+      &:hover {
+          background-color: hsl(var(--main-tint), 30%, 30%);
+          color: hsl(var(--main-tint), 50%, 100%);
+      }
     }
   }
   &--main {
@@ -41,7 +45,7 @@ h1 {
   &--footer {
     background-color: hsl(var(--main-tint), 20%, 20%);
     color: hsl(150, 50%, 100%);
-    padding: .5rem .5rem .75rem;
+    padding: .5rem .5rem .5rem;
     width: 100vw;
   }
 }
