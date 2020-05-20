@@ -26,6 +26,7 @@ export default function QuizzTemplate(props) {
     const [currentQuestion, setCurrentQuestion] = useState(0)
     const [currentStep, setCurrentStep] = useState(STEP_INTRO)
     const [gamePaused, setGamePaused] = useState(false)
+    const [lastKeyCode, setLastKeyCode] = useState(null)
     const eltAnswer = useRef(null)
     const idTimeout = useRef(null)
     const idInterval = useRef(null)
@@ -37,9 +38,11 @@ export default function QuizzTemplate(props) {
         if (recipesJSON !== null) {
             highScore.current = JSON.parse(recipesJSON)
         }
+        document.addEventListener('keyup', handleKeyUp);
         return () => {
             clearTimeout(idTimeout.current)
             clearInterval(idInterval.current)
+            document.removeEventListener('keyup', handleKeyUp);
         }
     }, [])
 
@@ -48,8 +51,23 @@ export default function QuizzTemplate(props) {
             nextQuestion()
     }, [currentStep])
 
+    useEffect(() => {
+        switch (true) {
+            case lastKeyCode === "Enter":
+                handleValidate()
+                setLastKeyCode(null)
+                break
+            default:
+                break
+        }
+    }, [lastKeyCode])
+
+    function handleKeyUp(event) {
+        setLastKeyCode(event.code)
+    }
+
     function handleValidate(event) {
-        event.preventDefault()
+        if (event) event.preventDefault()
         switch (true) {
             case currentStep === STEP_INTRO:
                 initGame()
