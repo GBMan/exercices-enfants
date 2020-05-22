@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { convertMillisecondsToMinutesSeconds } from '../../utils/misc'
 import Timer from '../../utils/Timer'
+import anime from 'animejs/lib/anime.es.js'
 
 export default function QuizzTemplate(props) {
     const {
@@ -28,10 +29,12 @@ export default function QuizzTemplate(props) {
     const [gamePaused, setGamePaused] = useState(false)
     const [lastKeyCode, setLastKeyCode] = useState(null)
     const eltAnswer = useRef(null)
+    const eltForm = useRef(null)
     const idTimeout = useRef(null)
     const idInterval = useRef(null)
     const highScore = useRef(null)
     const timer = useRef(new Timer())
+    const animationRef = useRef(null);
 
     useEffect(() => {
         const recipesJSON = localStorage.getItem(localStorageKey)
@@ -39,6 +42,18 @@ export default function QuizzTemplate(props) {
             highScore.current = JSON.parse(recipesJSON)
         }
         document.addEventListener('keyup', handleKeyUp);
+
+        
+    // animationRef.current = anime({
+    //     targets: ".exercice",
+    //     translateX: 250,
+    //     delay: function(el, i) {
+    //       return i * 100;
+    //     },
+    //     loop: true,
+    //     direction: "alternate",
+    //     easing: "easeInOutSine"
+    //   });
         return () => {
             clearTimeout(idTimeout.current)
             clearInterval(idInterval.current)
@@ -82,6 +97,16 @@ export default function QuizzTemplate(props) {
                     idTimeout.current = setTimeout(nextQuestion, DURATION_GOOD_ANSWER)
                 }
                 else {
+                    anime({
+                        targets: '.exercice',
+                        translateX: [
+                            {value:-10, duration:50, easing: 'easeInOutExpo'},
+                            {value:10, duration:100, easing: 'easeInOutExpo'},
+                            {value:-10, duration:100, easing: 'easeInOutExpo'},
+                            {value:10, duration:100, easing: 'easeInOutExpo'},
+                            {value:0, duration:50, easing: 'easeInOutExpo'}
+                        ]
+                    })
                     if (playerAnswer === "") {
                         setMessage("Oups ! Mets une réponse avant de valider.")
                         setError(true)
@@ -172,7 +197,7 @@ export default function QuizzTemplate(props) {
     }
 
     return (
-        <form className="exercice" onSubmit={(event) => {handleValidate(event)}}>
+        <form className="exercice" ref={eltForm} onSubmit={(event) => {handleValidate(event)}}>
             <h2 className="exercice--title">{title}</h2>
             {currentStep === STEP_INTRO && <div className="exercice--intro">
                 <div className="exercice--rules">{rules}</div>
