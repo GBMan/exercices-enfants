@@ -94,6 +94,12 @@
                 margin-bottom: 0;
             }
         }
+        &-score {
+            display: inline-block;
+            font-family: $font-picto;
+            text-align: center;
+            width: 100%;
+        }
     }
     &--bilan-txt {
         font-family: $font-komika;

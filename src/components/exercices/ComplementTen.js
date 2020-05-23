@@ -16,7 +16,22 @@ export default function ComplementTen() {
         return {question: question, answer:answer}
     }
     function getBilan(timerMs, nbErrors, highScore) {
-        return `Bravo ! Tu as terminé en ${convertMillisecondsToMinutesSeconds(timerMs)} avec ${nbErrors === 0 ? "aucune erreur" : (nbErrors === 1) ? "1 erreur" : nbErrors+" erreurs"}. Cela fait à peu près ${Math.round((timerMs/1000)/nbQuestions)} secondes par question. Le record est ${convertMillisecondsToMinutesSeconds(highScore)}.`
+        let score = 5
+
+        if (nbErrors > 0) score-- 
+        if (nbErrors > 1) score--
+        if (timerMs > nbQuestions*3000) score-- 
+        if (timerMs > nbQuestions*6000) score--
+
+        let starScore = ""
+        for (let i = 0; i < 5; i++) {
+            if (i < score) starScore += "Z"
+            else starScore += "b"
+        }
+
+        return `Bravo ! Tu as terminé en <strong>${convertMillisecondsToMinutesSeconds(timerMs)}</strong> avec <strong>${nbErrors === 0 ? "aucune erreur" : (nbErrors === 1) ? "1 erreur" : nbErrors+" erreurs"}</strong>. Cela fait à peu près <strong>${Math.round((timerMs/1000)/nbQuestions)}</strong> secondes par question.<br />
+        <span class="exercice--bilan-score">${starScore}</span><br />
+        Le record est <strong>${convertMillisecondsToMinutesSeconds(highScore)}</strong>.`
     }
 
     return (

@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import { convertMillisecondsToMinutesSeconds } from '../../utils/misc'
 import Timer from '../../utils/Timer'
 import anime from 'animejs/lib/anime.es.js'
+import ReactHtmlParser from 'react-html-parser';
 
 export default function QuizzTemplate(props) {
     const {
@@ -32,6 +33,7 @@ export default function QuizzTemplate(props) {
     const [gamePaused, setGamePaused] = useState(false)
     const [lastKeyCode, setLastKeyCode] = useState(null)
     const eltAnswer = useRef(null)
+    const eltBilan = useRef(null)
     const idTimeout = useRef(null)
     const idInterval = useRef(null)
     const highScore = useRef(null)
@@ -153,7 +155,6 @@ export default function QuizzTemplate(props) {
             }
             highScore.current = newHighScore
             localStorage.setItem(localStorageKey, JSON.stringify(highScore.current))
-
             setMessage(getBilan(timer.current.getMilliseconds(), nbErrors, highScore.current.timer))
         }
         else {
@@ -208,7 +209,7 @@ export default function QuizzTemplate(props) {
                 </div>
             </div>}
             {currentStep === STEP_BILAN && <div className="exercice--bilan">
-                <div className="exercice--bilan-txt">{message}</div>
+                <div className="exercice--bilan-txt" ref={eltBilan}>{ReactHtmlParser(message)}</div>
                 <button className="btn exercice--btn" type="button" onClick={initGame}>Rejouer</button>
             </div>}
         </div>
