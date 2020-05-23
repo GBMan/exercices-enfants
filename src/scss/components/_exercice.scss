@@ -48,10 +48,13 @@
         }
     }
     &--message {
-        color: hsl(var(--good-tint), 50%, 50%);
         font-family: $font-komika;
+        // font-family: $font-roboto;
         margin-bottom: 1rem;
         min-height: 1.4rem;
+        &.good {
+            color: hsl(var(--good-tint), 50%, 50%);
+        }
         &.error {
             color: hsl(var(--error-tint), 50%, 50%);
         }

@@ -16,12 +16,15 @@ export default function QuizzTemplate(props) {
     const STEP_INTRO = "intro"
     const STEP_GAME = "game"
     const STEP_BILAN = "bilan"
+    const MESSAGE_STATUS_DEFAULT = ""
+    const MESSAGE_STATUS_GOOD = "good"
+    const MESSAGE_STATUS_ERROR = "error"
     const DURATION_GOOD_ANSWER = 500
     const DURATION_TIMER = 1000
     const [answer, setAnswer] = useState(undefined)
     const [question, setQuestion] = useState("")
     const [message, setMessage] = useState("")
-    const [error, setError] = useState(false)
+    const [messageStatus, setMessageStatus] = useState(MESSAGE_STATUS_DEFAULT)
     const [nbErrors, setNbErrors] = useState(0)
     const [time, setTime] = useState("00:00")
     const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -29,12 +32,10 @@ export default function QuizzTemplate(props) {
     const [gamePaused, setGamePaused] = useState(false)
     const [lastKeyCode, setLastKeyCode] = useState(null)
     const eltAnswer = useRef(null)
-    const eltForm = useRef(null)
     const idTimeout = useRef(null)
     const idInterval = useRef(null)
     const highScore = useRef(null)
     const timer = useRef(new Timer())
-    const animationRef = useRef(null);
 
     useEffect(() => {
         const recipesJSON = localStorage.getItem(localStorageKey)
@@ -42,18 +43,6 @@ export default function QuizzTemplate(props) {
             highScore.current = JSON.parse(recipesJSON)
         }
         document.addEventListener('keyup', handleKeyUp);
-
-        
-    // animationRef.current = anime({
-    //     targets: ".exercice",
-    //     translateX: 250,
-    //     delay: function(el, i) {
-    //       return i * 100;
-    //     },
-    //     loop: true,
-    //     direction: "alternate",
-    //     easing: "easeInOutSine"
-    //   });
         return () => {
             clearTimeout(idTimeout.current)
             clearInterval(idInterval.current)
@@ -67,13 +56,10 @@ export default function QuizzTemplate(props) {
     }, [currentStep])
 
     useEffect(() => {
-        switch (true) {
-            case lastKeyCode === "Enter":
-                handleValidate()
-                setLastKeyCode(null)
-                break
-            default:
-                break
+        if (lastKeyCode === "Enter") {
+            if (currentStep === STEP_GAME) handleValidate()
+            else initGame()
+            setLastKeyCode(null)
         }
     }, [lastKeyCode])
 
@@ -82,49 +68,36 @@ export default function QuizzTemplate(props) {
     }
 
     function handleValidate(event) {
-        if (event) event.preventDefault()
-        switch (true) {
-            case currentStep === STEP_INTRO:
-                initGame()
-                break;
-            case currentStep === STEP_GAME:
-                if (gamePaused) return
-                const playerAnswer = Number(eltAnswer.current.value)
-                if (playerAnswer === answer) {
-                    setMessage("Bonne réponse !")
-                    setError(false)
-                    clearTimeout(idTimeout.current)
-                    idTimeout.current = setTimeout(nextQuestion, DURATION_GOOD_ANSWER)
-                }
-                else {
-                    anime({
-                        targets: '.exercice',
-                        translateX: [
-                            {value:-10, duration:50, easing: 'easeInOutExpo'},
-                            {value:10, duration:100, easing: 'easeInOutExpo'},
-                            {value:-10, duration:100, easing: 'easeInOutExpo'},
-                            {value:10, duration:100, easing: 'easeInOutExpo'},
-                            {value:0, duration:50, easing: 'easeInOutExpo'}
-                        ]
-                    })
-                    if (playerAnswer === "") {
-                        setMessage("Oups ! Mets une réponse avant de valider.")
-                        setError(true)
-                    }
-                    else {
-                        setMessage("Oups ! Il y a une erreur.")
-                        eltAnswer.current.select()
-                        setError(true)
-                        setNbErrors((prevNbError) => {return prevNbError + 1})
-                    }
-                }
-                break;
-            case currentStep === STEP_BILAN:
-                initGame()
-                setCurrentStep(STEP_GAME)
-                break;
-            default:
-                break;
+        if (gamePaused) return
+        const playerAnswer = eltAnswer.current.value
+        if (Number(playerAnswer) === answer) {
+            setMessageStatus(MESSAGE_STATUS_GOOD)
+            setMessage("Bonne réponse !")
+            clearTimeout(idTimeout.current)
+            eltAnswer.current.disabled = true
+            idTimeout.current = setTimeout(nextQuestion, DURATION_GOOD_ANSWER)
+        }
+        else {
+            anime({
+                targets: '.exercice',
+                translateX: [
+                    {value:-10, duration:50, easing: 'easeInOutExpo'},
+                    {value:10, duration:100, easing: 'easeInOutExpo'},
+                    {value:-10, duration:100, easing: 'easeInOutExpo'},
+                    {value:10, duration:100, easing: 'easeInOutExpo'},
+                    {value:0, duration:50, easing: 'easeInOutExpo'}
+                ]
+            })
+            setMessageStatus(MESSAGE_STATUS_ERROR)
+            if (playerAnswer === "") {
+                setMessage("Oups ! Mets une réponse avant de valider.")
+                eltAnswer.current.focus()
+            }
+            else {
+                setMessage("Oups ! Il y a une erreur.")
+                eltAnswer.current.select()
+                setNbErrors((prevNbError) => {return prevNbError + 1})
+            }
         }
     }
 
@@ -141,8 +114,7 @@ export default function QuizzTemplate(props) {
         setAnswer("")
         setMessage("")
         setNbErrors(0)
-        setError(false)
-        // setGameCompleted(false)
+        setMessageStatus(MESSAGE_STATUS_DEFAULT)
 
         clearTimeout(idTimeout.current)
         clearInterval(idInterval.current)
@@ -153,9 +125,14 @@ export default function QuizzTemplate(props) {
     function togglePause() {
         timer.current.togglePauseResumeChrono()
         clearInterval(idInterval.current)
+        setMessageStatus(MESSAGE_STATUS_DEFAULT)
         if (gamePaused) {
+            setMessage("")
             updateTimer()
             idInterval.current = setInterval(updateTimer, DURATION_TIMER)
+        }
+        else {
+            setMessage("Jeu en pause.")
         }
         setGamePaused((prevGamePaused) => {return !prevGamePaused})
     }
@@ -186,6 +163,7 @@ export default function QuizzTemplate(props) {
             setAnswer(newQuestion.answer)
             setMessage("")
             if (eltAnswer && eltAnswer.current) {
+                eltAnswer.current.disabled = false
                 eltAnswer.current.value = ""
                 eltAnswer.current.focus()
             }
@@ -197,40 +175,42 @@ export default function QuizzTemplate(props) {
     }
 
     return (
-        <form className="exercice" ref={eltForm} onSubmit={(event) => {handleValidate(event)}}>
+        <div className="exercice">
             <h2 className="exercice--title">{title}</h2>
             {currentStep === STEP_INTRO && <div className="exercice--intro">
                 <div className="exercice--rules">{rules}</div>
-                <button className="btn exercice--btn" type="submit">Prêt !</button>
+                <button className="btn exercice--btn" type="button" onClick={initGame}>Prêt !</button>
             </div>}
             {currentStep === STEP_GAME && <div className="exercice--game">
                 <div className="exercice--infos">
                     <div className="exercice--progression">{currentQuestion}/{nbQuestions}</div>
                     <div className="exercice--timer">{time} <span className="btn exercice--btn-play-pause" onClick={togglePause}>{!gamePaused ? "e" : "c"}</span></div>
                 </div>
-                <div className="exercice--question">{!gamePaused ? question : "Jeu en pause."}</div>
-                {!gamePaused && <input 
-                    ref={eltAnswer} 
-                    type="text" 
-                    id="answer" 
-                    name="answer" 
-                    placeholder="Réponse ?" 
-                    className="exercice--input" 
-                    autoComplete="off" 
-                    pattern="[0-9]*" 
-                    aria-labelledby="Réponse"
-                    autoFocus 
-                />}
-                <div className={`exercice--message ${(error) ? "error" : ""}`}>{message}</div>
+                {!gamePaused && <>
+                    <div className="exercice--question">{question}</div>
+                    <input 
+                        ref={eltAnswer} 
+                        type="text" 
+                        id="answer" 
+                        name="answer" 
+                        placeholder="Réponse ?" 
+                        className="exercice--input" 
+                        autoComplete="off" 
+                        pattern="[0-9]*" 
+                        aria-labelledby="Réponse"
+                        autoFocus 
+                    />
+                </>}
+                <div className={`exercice--message ${messageStatus}`}>{message}</div>
                 <div className="exercice--actions">
                     {currentStep === STEP_GAME && <button className="btn exercice--btn" type="button" onClick={newGame}>Nouvelle partie</button>}
-                    <button className="btn exercice--btn" type="submit">Valider</button>
+                    <button className="btn exercice--btn" type="button" onClick={handleValidate}>Valider</button>
                 </div>
             </div>}
             {currentStep === STEP_BILAN && <div className="exercice--bilan">
                 <div className="exercice--bilan-txt">{message}</div>
-                <button className="btn exercice--btn" type="submit">Rejouer</button>
+                <button className="btn exercice--btn" type="button" onClick={initGame}>Rejouer</button>
             </div>}
-        </form>
+        </div>
     )
 }
