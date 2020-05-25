@@ -1,5 +1,6 @@
 import React from 'react'
 import { getRandom_1_to_9, convertMillisecondsToMinutesSeconds } from '../../utils/misc'
+import { FORMAT } from '../../utils/const'
 import QuizzTemplate from './QuizzTemplate'
 
 const LOCAL_STORAGE_KEY = "exercices-ce2"
@@ -8,6 +9,7 @@ export default function Multiplication() {
     const title = "Multiplication"
     const nbQuestions = 10
     const rules = `Tu dois saisir le résultat de la multiplication. Il y aura ${nbQuestions} questions.`
+    const format = FORMAT.NUMBER
 
     function getQuestion() {
         const number1 = getRandom_1_to_9()
@@ -36,6 +38,6 @@ export default function Multiplication() {
     }
 
     return (
-        <QuizzTemplate title={title} getQuestion={getQuestion} getBilan={getBilan} nbQuestions={nbQuestions} rules={rules} localStorageKey={LOCAL_STORAGE_KEY} />
+        <QuizzTemplate title={title} getQuestion={getQuestion} getBilan={getBilan} nbQuestions={nbQuestions} rules={rules} localStorageKey={LOCAL_STORAGE_KEY} format={format} />
     )
 }

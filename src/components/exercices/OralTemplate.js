@@ -2,10 +2,11 @@ import React, {useState, useEffect, useRef} from 'react'
 import { convertMillisecondsToMinutesSeconds } from '../../utils/misc'
 import { FORMAT } from '../../utils/const'
 import Timer from '../../utils/Timer'
+import Speaker from '../../utils/Speaker'
 import anime from 'animejs/lib/anime.es.js'
 import ReactHtmlParser from 'react-html-parser';
 
-export default function QuizzTemplate(props) {
+export default function OralTemplate(props) {
     const {
         title,
         localStorageKey,
@@ -40,6 +41,7 @@ export default function QuizzTemplate(props) {
     const idInterval = useRef(null)
     const highScore = useRef(null)
     const timer = useRef(null)
+    const speaker = useRef(null)
 
     useEffect(() => {
         const recipesJSON = localStorage.getItem(localStorageKey)
@@ -47,6 +49,7 @@ export default function QuizzTemplate(props) {
             highScore.current = JSON.parse(recipesJSON)
         }
         document.addEventListener('keyup', handleKeyUp);
+
         return () => {
             clearTimeout(idTimeout.current)
             clearInterval(idInterval.current)
@@ -112,6 +115,7 @@ export default function QuizzTemplate(props) {
 
     function initGame() {
         timer.current = new Timer(true)
+        speaker.current = new Speaker()
         setTime("00:00")
         setCurrentQuestion(0)
         setCurrentStep(STEP_GAME)
@@ -163,6 +167,7 @@ export default function QuizzTemplate(props) {
         else {
             setCurrentQuestion((prevCurrentQuestion) => {return prevCurrentQuestion + 1})
             const newQuestion = getQuestion()
+            speaker.current.playText(newQuestion.question)
             setQuestion(newQuestion.question)
             setAnswer(newQuestion.answer)
             setMessage("")
@@ -172,6 +177,18 @@ export default function QuizzTemplate(props) {
                 eltAnswer.current.focus()
             }
         }
+    }
+
+    function speak() {
+        anime({
+            targets: '.exercice--btn-reload',
+            rotate: 179,
+            duration: 400,
+            direction: 'alternate',
+            easing: "easeInOutExpo"
+        })
+        speaker.current.playText(question)
+        eltAnswer.current.focus()
     }
 
     function updateTimer() {
@@ -191,7 +208,7 @@ export default function QuizzTemplate(props) {
                     <div className="exercice--timer">{time} <span className="btn exercice--btn-play-pause" onClick={togglePause}>{!gamePaused ? "e" : "c"}</span></div>
                 </div>
                 {!gamePaused && <>
-                    <div className="exercice--question">{question}</div>
+                    <div className="exercice--question">Redicter le mot <span className="btn exercice--btn-reload" onClick={speak}>{"g"}</span></div>
                     <input 
                         ref={eltAnswer} 
                         type="text" 

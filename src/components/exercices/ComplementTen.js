@@ -1,5 +1,6 @@
 import React from 'react'
 import { getRandom_1_to_9, convertMillisecondsToMinutesSeconds } from '../../utils/misc'
+import { FORMAT } from '../../utils/const'
 import QuizzTemplate from './QuizzTemplate'
 
 const LOCAL_STORAGE_KEY = "exercices-cp"
@@ -8,6 +9,7 @@ export default function ComplementTen() {
     const title = "Complément à 10"
     const nbQuestions = 10
     const rules = `Tu dois saisir le nombre complémentaire permettant d'obtenir 10. Il y aura ${nbQuestions} questions.`
+    const format = FORMAT.NUMBER
 
     function getQuestion() {
         const number = getRandom_1_to_9()
@@ -35,6 +37,6 @@ export default function ComplementTen() {
     }
 
     return (
-        <QuizzTemplate title={title} getQuestion={getQuestion} getBilan={getBilan} nbQuestions={nbQuestions} rules={rules} localStorageKey={LOCAL_STORAGE_KEY} />
+        <QuizzTemplate title={title} getQuestion={getQuestion} getBilan={getBilan} nbQuestions={nbQuestions} rules={rules} localStorageKey={LOCAL_STORAGE_KEY} format={format} />
     )
 }

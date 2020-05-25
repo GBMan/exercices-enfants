@@ -72,6 +72,12 @@
         font-family: $font-picto;
         vertical-align: text-bottom;
     }
+    &--btn-reload {
+        display: inline-block;
+        font-family: $font-picto;
+        padding: 0;
+        transform-origin: 50% 56%;
+    }
     &--actions {
         display: flex;
         justify-content: space-between;
