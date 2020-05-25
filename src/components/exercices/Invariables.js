@@ -673,8 +673,8 @@ export default function Invariables() {
 
         if (nbErrors > 0) score-- 
         if (nbErrors > 2) score--
-        if (timerMs > nbQuestions*10000) score-- 
-        if (timerMs > nbQuestions*20000) score--
+        if (timerMs > nbQuestions*15000) score-- 
+        if (timerMs > nbQuestions*30000) score--
 
         let starScore = ""
         for (let i = 0; i < 5; i++) {
