@@ -124,6 +124,8 @@ export default function OralTemplate(props) {
         setMessage("")
         setNbErrors(0)
         setMessageStatus(MESSAGE_STATUS_DEFAULT)
+        setGamePaused(false)
+        setLastKeyCode(null)
 
         clearTimeout(idTimeout.current)
         clearInterval(idInterval.current)
