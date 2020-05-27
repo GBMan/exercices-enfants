@@ -1,5 +1,5 @@
 import React from 'react'
-import { getRandom_1_to_9, convertMillisecondsToMinutesSeconds } from '../../utils/misc'
+import { convertMillisecondsToMinutesSeconds } from '../../utils/misc'
 import { FORMAT } from '../../utils/const'
 import OralTemplate from './OralTemplate'
 
