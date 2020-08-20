@@ -36,7 +36,7 @@ function App() {
         {level === LEVEL_CE2_INVARIABLES && <Invariables />}
       </main>
       <footer className="app--footer">
-        Développé par Charles
+        Développé par <a href="https://sablons.fr" className="app--footer-link" target="_blank">Charles</a>
       </footer>
     </div>
   );

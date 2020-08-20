@@ -7,7 +7,7 @@
   box-sizing: border-box;
 }
 body {
-  background-image: url('/bg.jpg');
+  background-image: url('../bg.jpg');
   font-family: $font-engcomica;
   margin: 0;
 }
@@ -48,5 +48,8 @@ h1 {
     color: hsl(150, 50%, 100%);
     padding: .5rem .5rem .5rem;
     width: 100vw;
+    &-link {
+      color: hsl(150, 50%, 100%);
+    }
   }
 }
