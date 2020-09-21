@@ -1,5 +1,6 @@
-export function getRandom_1_to_9() {
-    return Math.ceil(Math.random()*9)
+export function getRandom_min_to_max(min, max, isInt = true) {
+    let rand = Math.random()*(max - min) + min
+    return (isInt) ? Math.ceil(rand) : rand
 }
 
 export function convertMillisecondsToMinutesSeconds(totalMilliseconds) {

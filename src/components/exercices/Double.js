@@ -1,5 +1,5 @@
 import React from 'react'
-import { getRandom_1_to_9, convertMillisecondsToMinutesSeconds } from '../../utils/misc'
+import { getRandom_min_to_max, convertMillisecondsToMinutesSeconds } from '../../utils/misc'
 import { FORMAT } from '../../utils/const'
 import QuizzTemplate from './QuizzTemplate'
 
@@ -12,7 +12,7 @@ export default function Double() {
     const format = FORMAT.NUMBER
 
     function getQuestion() {
-        const number = getRandom_1_to_9()
+        const number = getRandom_min_to_max(1, 9)
         const question = `Le double de ${number} est ?`
         const answer = number * 2
         return {question: question, answer:answer}

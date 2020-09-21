@@ -56,6 +56,9 @@
         &.good {
             color: hsl(var(--good-tint), 50%, 50%);
         }
+        &.warning {
+            color: hsl(var(--warning-tint), 50%, 50%);
+        }
         &.error {
             color: hsl(var(--error-tint), 50%, 50%);
         }

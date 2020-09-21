@@ -1,5 +1,5 @@
 import React from 'react'
-import { getRandom_1_to_9, convertMillisecondsToMinutesSeconds } from '../../utils/misc'
+import { getRandom_min_to_max, convertMillisecondsToMinutesSeconds } from '../../utils/misc'
 import { FORMAT } from '../../utils/const'
 import QuizzTemplate from './QuizzTemplate'
 
@@ -12,8 +12,8 @@ export default function Multiplication() {
     const format = FORMAT.NUMBER
 
     function getQuestion() {
-        const number1 = getRandom_1_to_9()
-        const number2 = getRandom_1_to_9()
+        const number1 = getRandom_min_to_max(3, 9)
+        const number2 = getRandom_min_to_max(3, 9)
         const question = `${number1} x ${number2} = ?`
         const answer = number1*number2
         return {question: question, answer:answer}

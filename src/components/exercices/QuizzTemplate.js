@@ -21,6 +21,7 @@ export default function QuizzTemplate(props) {
     const STEP_BILAN = "bilan"
     const MESSAGE_STATUS_DEFAULT = ""
     const MESSAGE_STATUS_GOOD = "good"
+    const MESSAGE_STATUS_WARNING = "warning"
     const MESSAGE_STATUS_ERROR = "error"
     const DURATION_GOOD_ANSWER = 500
     const DURATION_TIMER = 1000
@@ -93,12 +94,13 @@ export default function QuizzTemplate(props) {
                     {value:0, duration:50, easing: 'easeInOutExpo'}
                 ]
             })
-            setMessageStatus(MESSAGE_STATUS_ERROR)
             if (playerAnswer === "") {
+                setMessageStatus(MESSAGE_STATUS_WARNING)
                 setMessage("Oups ! Mets une réponse avant de valider.")
                 eltAnswer.current.focus()
             }
             else {
+                setMessageStatus(MESSAGE_STATUS_ERROR)
                 setMessage("Oups ! Il y a une erreur.")
                 eltAnswer.current.select()
                 setNbErrors((prevNbError) => {return prevNbError + 1})
