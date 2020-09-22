@@ -7,7 +7,7 @@ const LOCAL_STORAGE_KEY = "exercices-ce2"
 
 export default function Invariables() {
     const title = "Mots invariables"
-    const nbQuestions = 10
+    const nbQuestions = 5
     const rules = `Tu dois saisir le mot dicté avec la bonne orthographe. Il y aura ${nbQuestions} mots.`
     const format = FORMAT.STRING
 

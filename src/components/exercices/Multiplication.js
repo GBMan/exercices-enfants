@@ -3,7 +3,7 @@ import { getRandom_min_to_max, convertMillisecondsToMinutesSeconds } from '../..
 import { FORMAT } from '../../utils/const'
 import QuizzTemplate from './QuizzTemplate'
 
-const LOCAL_STORAGE_KEY = "exercices-ce2"
+const LOCAL_STORAGE_KEY = "exercices-ce2m"
 
 export default function Multiplication() {
     const title = "Multiplication"
@@ -12,7 +12,8 @@ export default function Multiplication() {
     const format = FORMAT.NUMBER
 
     function getQuestion() {
-        const number1 = getRandom_min_to_max(3, 9)
+        // const number1 = getRandom_min_to_max(3, 9)
+        const number1 = 6
         const number2 = getRandom_min_to_max(3, 9)
         const question = `${number1} x ${number2} = ?`
         const answer = number1*number2
@@ -23,8 +24,8 @@ export default function Multiplication() {
 
         if (nbErrors > 0) score-- 
         if (nbErrors > 1) score--
-        if (timerMs > nbQuestions*3000) score-- 
-        if (timerMs > nbQuestions*6000) score--
+        if (timerMs > nbQuestions*4500) score-- 
+        if (timerMs > nbQuestions*7000) score--
 
         let starScore = ""
         for (let i = 0; i < 5; i++) {

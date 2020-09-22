@@ -22,8 +22,8 @@ export default function ComplementTen() {
 
         if (nbErrors > 0) score-- 
         if (nbErrors > 1) score--
-        if (timerMs > nbQuestions*3000) score-- 
-        if (timerMs > nbQuestions*6000) score--
+        if (timerMs > nbQuestions*4500) score-- 
+        if (timerMs > nbQuestions*7000) score--
 
         let starScore = ""
         for (let i = 0; i < 5; i++) {
