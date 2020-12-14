@@ -12,8 +12,8 @@ export default function Multiplication() {
     const format = FORMAT.NUMBER
 
     function getQuestion() {
-        // const number1 = getRandom_min_to_max(3, 9)
-        const number1 = 6
+        const number1 = getRandom_min_to_max(3, 9)
+        // const number1 = 6    // Temp pour aider Louis à réviser
         const number2 = getRandom_min_to_max(3, 9)
         const question = `${number1} x ${number2} = ?`
         const answer = number1*number2
@@ -24,7 +24,7 @@ export default function Multiplication() {
 
         if (nbErrors > 0) score-- 
         if (nbErrors > 1) score--
-        if (timerMs > nbQuestions*4500) score-- 
+        if (timerMs > nbQuestions*5000) score-- 
         if (timerMs > nbQuestions*7000) score--
 
         let starScore = ""
